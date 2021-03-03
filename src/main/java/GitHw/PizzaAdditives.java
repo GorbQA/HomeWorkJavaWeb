@@ -18,29 +18,42 @@ public class PizzaAdditives {
         System.out.println("Started test");
         String html = "C:\\Java\\Git\\src\\main\\resources\\select.html";
         webDriver.get(html);
-        Actions action = new Actions(webDriver);
-        WebElement additives = webDriver.findElement(By.cssSelector("#additives"));//найден элемент список ингридиентов
-        System.out.println("ok");
-        Select selectElement = new Select(additives); //запущен класс по работе с селекторами
-        List <WebElement> additive = selectElement.getOptions(); //создан лист из вебэлементов
-        for (WebElement add : additive) {
-            System.out.println(add.getText());                    // проверила видно ли эти элементы
+        Actions actions = new Actions(webDriver);
+        try {
+            List<WebElement> option = webDriver.findElements(By.tagName("option"));
+            actions
+                    .click(option.get(0))
+                    .keyDown(Keys.CONTROL)
+                    .perform();
+            String option1 = webDriver.findElement(By.id("out2")).getText();
+            if (option1.equals("Cheese")) {
+                System.out.println("Pass");
+            } else {
+                System.out.println("Error");
+            }
+            actions.moveToElement(option.get(2))
+                    .click().perform();
+            String option2 = webDriver.findElement(By.id("out2")).getText();
+            if (option2.equals("Cheese\nPepperoni")) {
+                System.out.println("Pass");
+            } else {
+                System.out.println("Error");
+            }
+            actions
+                    .moveToElement(option.get(4))
+                    .click().pause(2000).perform();
+            String option3 = webDriver.findElement(By.id("out2")).getText();
+            if (option3.equals("Cheese\nPepperoni\nMushrooms")) {
+                System.out.println("Pass");
+            } else {
+                System.out.println("Error");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        Thread.sleep(2000);
-        System.out.println("ok");
-        action.click(additive.get(0))                             // кликаю по первому элементу
-                .keyDown(Keys.CONTROL)
-                .moveToElement(additive.get(2));                  // кликаю по третьему элементу
-        WebElement elementRez = webDriver.findElement(By.cssSelector("#out2")); //проделываю тоже со вторым окном
-        Select selRez = new Select(elementRez);
-        List <WebElement> listRez = selRez.getOptions();
-        for (WebElement webElement : listRez) {
-            System.out.println(webElement.getText());
-        }
-        System.out.println("ok");
 
-        Thread.sleep(2000);
         webDriver.quit();
-        System.out.println("Ended test");
+        System.out.println("End test");
     }
 }
+
