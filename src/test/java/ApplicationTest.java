@@ -21,9 +21,9 @@ public class ApplicationTest {
     @Before
     public void setUp() {
         System.out.println("Before test");
-        System.setProperty("webdriver.chrome.driver", "C:\\webdrivers\\chromedriver_win32 (1)\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
         webDriver = new ChromeDriver();
-        webDriver.get("C:\\Users\\Lukashyk\\IdeaProjects\\SeleniumQA2020\\src\\main\\resources\\waits.html");
+        webDriver.get("C:\\Java\\Git\\src\\main\\resources\\waits.html");
     }
 
 
