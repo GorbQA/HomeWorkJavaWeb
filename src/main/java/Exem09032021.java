@@ -6,8 +6,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-public class Exem0903 {
+public class Exem09032021 {
     public static void main(String[] args) {
         System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
         WebDriver webDriver = new ChromeDriver();

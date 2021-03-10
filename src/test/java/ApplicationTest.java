@@ -1,15 +1,20 @@
+import net.bytebuddy.agent.builder.AgentBuilder;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -26,65 +31,74 @@ public class ApplicationTest {
         webDriver.get("C:\\Java\\Git\\src\\main\\resources\\waits.html");
     }
 
-
     @Test
-    public void testHeaderMain() throws InterruptedException {
-        Thread.sleep(30000);
-        WebElement h1 = webDriver.findElement(By.tagName("h1"));
-        System.out.println(h1.getText());
+    public void testAlertWebDriwerWait (){
+        System.out.println("Check alert");
+        WebDriverWait webDriverWaitAlert = new WebDriverWait(webDriver, 120);
+        Alert alert=webDriverWaitAlert.until(new WaitAlert());
+        Assert.assertEquals("Test it", alert.getText());
+        System.out.println("Text alert = " + alert.getText());
+        alert.accept();
     }
 
-    @Test
-    public void testHeaderFluentWait() {
-        //Явное ожидание
-        FluentWait<WebDriver>fluentWait = new FluentWait<>(webDriver);
-        //общее время ожидания 30 секунд
-        //fluentWait.withTimeout(30, TimeUnit.SECONDS);
-        fluentWait.withTimeout(Duration.ofSeconds(30));
-        //проверка каждую секнду
-        fluentWait.pollingEvery(Duration.ofSeconds(1));
-        //Игнорируем исключения
-        fluentWait.ignoring(NoSuchElementException.class);
-        //WaitH1 waitH1 = new WaitH1();//Класс реализует интерфейс Function
-        //fluentWait.until(waitH1);
-
-
-        //Анонимный класс
-  /*      fluentWait.until(new Function<WebDriver, WebElement>() {
-            @Override
-            public WebElement apply(WebDriver webDriver) {
-                return webDriver.findElement(By.tagName("h1"));
-            }
-        });*/
-
-        //Лямда выражения
-        WebElement h1 = fluentWait.until(webDriver -> webDriver.findElement(By.tagName("h1")));
-        System.out.println(h1.getText());
-
-    }
-
+    //    @Test
+//    public void testAlertWebDriwerWait (){
+//        System.out.println("Check ");
+//        WebDriverWait webDriverWaitAlert = new WebDriverWait(webDriver, 120);
+//        System.out.println("ok");
+//        Alert alert=webDriverWaitAlert.until(new Function<WebDriver, Alert>() {
+//            @Override
+//            public Alert apply(WebDriver webDriver) {
+//                return webDriver.switchTo().alert();
+//            }
+//        });
+//        System.out.println(alert.getText());
+//        Assert.assertEquals("Test it", alert.getText());
+//        alert.accept();
+//    }
 
     @Test
-    public void testHeaderWebDriverWait(){
-        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 15);
-        WebElement h1 = webDriverWait.until(webDriver -> webDriver.findElement(By.tagName("h1")));
-        Assert.assertEquals("Hello selenium", h1.getText());
+    public void testBackgroundWebDriverWait (){
+        System.out.println("Check background");
+        WebDriverWait webDriverWaitBackground = new WebDriverWait(webDriver, 200);
+        WebElement background = webDriverWaitBackground.until(new WaitBackground());
+        if (background.isDisplayed()){
+        System.out.println("Background " + background.isDisplayed());}else {
+            System.err.println("Background " + background.isDisplayed());
+        }
     }
 
+//    @Test
+//    public void testBackgroundWebDriverWait (){
+//        System.out.println("Check background");
+//        WebDriverWait webDriverWaitBackground = new WebDriverWait(webDriver, 200);
+//        WebElement background = webDriverWaitBackground.until(new Function<WebDriver, WebElement>(){
+//            @Override
+//            public WebElement apply(WebDriver webDriver) {
+//                return webDriver.findElement(By.xpath("//*[@id=\"main\"]/ul/li[3]"));
+//            }
+//        });
+//        if (background.isDisplayed()){
+//        System.out.println("Background " + background.isDisplayed());}
+//        else {
+//            System.err.println("Background " + background.isDisplayed());
+//        }
+//    }
 
     @After
     public void close(){
         webDriver.quit();
+        System.out.println("Test ended");
     }
-
 }
-
-class WaitH1 implements Function<WebDriver, WebElement>{
-    //int count;
-
+class WaitAlert implements Function<WebDriver, Alert>{
+    @Override
+    public Alert apply(WebDriver webDriver) {
+        return webDriver.switchTo().alert();
+    }
+}
+class WaitBackground implements Function<WebDriver, WebElement>{
     @Override
     public WebElement apply(WebDriver webDriver) {
-        //System.out.println("Wait " + count + " second");
-        return webDriver.findElement(By.tagName("h1"));
-    }
-}
+        return webDriver.findElement(By.xpath("//*[@id=\"main\"]/ul/li[3]"));
+}}
